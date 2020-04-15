@@ -1,12 +1,13 @@
-import 'package:barbeiroapp/pages/register_page.dart';
+import 'package:barbeiroapp/pages/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,11 +41,45 @@ class _LoginPageState extends State<LoginPage> {
                     child: new TextFormField(
                         style: new TextStyle(color: Colors.white),
                         textAlign: TextAlign.center,
-
-
                         decoration: new InputDecoration(
                           labelText: 'E-mail',
-                          labelStyle: TextStyle(color: Color(0xFF707070), fontWeight: FontWeight.bold),
+                          labelStyle: TextStyle(
+                              color: Color(0xFF707070),
+                              fontWeight: FontWeight.bold),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white)),
+                          disabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red),
+                              borderRadius: BorderRadius.circular(30)),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(30)),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: BorderSide(color: Colors.red)),
+                        )),
+                  ),
+                ],
+              ),
+            ),
+            new SizedBox(
+              height: 15.0,
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
+              child: new Row(
+                children: <Widget>[
+                  Expanded(
+                    child: new TextFormField(
+                        style: new TextStyle(color: Colors.white),
+                        textAlign: TextAlign.center,
+                        keyboardType: TextInputType.text,
+                        decoration: new InputDecoration(
+                          labelText: 'Nome',
+                          labelStyle: TextStyle(
+                              color: Color(0xFF707070),
+                              fontWeight: FontWeight.bold),
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.white)),
                           disabledBorder: OutlineInputBorder(
@@ -76,7 +111,9 @@ class _LoginPageState extends State<LoginPage> {
                         textAlign: TextAlign.center,
                         decoration: new InputDecoration(
                           labelText: 'Senha',
-                          labelStyle: TextStyle(color: Color(0xFF707070),  fontWeight: FontWeight.bold),
+                          labelStyle: TextStyle(
+                              color: Color(0xFF707070),
+                              fontWeight: FontWeight.bold),
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.white)),
                           disabledBorder: OutlineInputBorder(
@@ -94,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             new SizedBox(
-              height: 30.0,
+              height: 20.0,
             ),
             Padding(
               padding:
@@ -113,9 +150,11 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       alignment: Alignment.center,
                       child: new Text(
-                        "Entrar",
-                        style:
-                            new TextStyle(fontSize: 20.0, color: Color(0XFF707070), fontWeight: FontWeight.bold),
+                        "Cadastrar",
+                        style: new TextStyle(
+                            fontSize: 20.0,
+                            color: Color(0XFF707070),
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -123,19 +162,9 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             new SizedBox(
-              height: 70.0,
+              height: 30.0,
             ),
-            Center(
-              child: new Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  new Text(
-                    "Esqueci a senha...",
-                    style: new TextStyle(fontSize: 20.0, color: Color(0XFF707070),  fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
+
             new Padding(
                 padding: const EdgeInsets.only(top: 15),
                 child: Center(
@@ -143,14 +172,20 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       new Text(
-                        "Não tem registro? ",
-                        style: new TextStyle(fontSize: 20.0, color: Color(0XFF707070), fontWeight: FontWeight.bold),
+                        "Já tem registro? ",
+                        style: new TextStyle(
+                            fontSize: 20.0,
+                            color: Color(0XFF707070),
+                            fontWeight: FontWeight.bold),
                       ),
                       GestureDetector(
-                        onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));},
+                        onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));},
                         child: new Text(
                         "clique Aqui.",
-                        style: new TextStyle(fontSize: 20.0, color: Colors.white,  fontWeight: FontWeight.bold),
+                        style: new TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
                       ))
                     ],
                   ),
