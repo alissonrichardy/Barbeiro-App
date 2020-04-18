@@ -1,14 +1,44 @@
 import 'package:barbeiroapp/pages/register_page.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+//import 'package:barbeiroapp/service/agendamento.dart' as service;
+import 'package:barbeiroapp/service/login.dart' as service;
+
+
 
 class LoginPage extends StatefulWidget {
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  final emailController = TextEditingController();
+  final senhaController = TextEditingController();
+
+  Future<bool> logar(String email, String senha) async{
+    bool resultado = await service.verificarLogin(email, senha);
+    if (resultado){
+      print("entrou");
+    }
+    else{
+      print("não entrou");
+    }
+    return resultado;
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
         backgroundColor: Color(0XFF1E1E1E), //Color(0XFF1E1E1E),
         body: new ListView(
@@ -40,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: new TextFormField(
                         style: new TextStyle(color: Colors.white),
                         textAlign: TextAlign.center,
-
+                        controller: emailController,
 
                         decoration: new InputDecoration(
                           labelText: 'E-mail',
@@ -74,6 +104,8 @@ class _LoginPageState extends State<LoginPage> {
                         style: new TextStyle(color: Colors.white),
                         obscureText: true,
                         textAlign: TextAlign.center,
+                        controller: senhaController,
+
                         decoration: new InputDecoration(
                           labelText: 'Senha',
                           labelStyle: TextStyle(color: Color(0xFF707070),  fontWeight: FontWeight.bold),
@@ -103,7 +135,12 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushReplacementNamed(context, '/loading', arguments: {
+                        'email': emailController.text,
+                        'senha': senhaController.text
+                      });
+                    },
                     child: new Container(
                       height: 50.0,
                       width: 150,
@@ -147,14 +184,24 @@ class _LoginPageState extends State<LoginPage> {
                         style: new TextStyle(fontSize: 20.0, color: Color(0XFF707070), fontWeight: FontWeight.bold),
                       ),
                       GestureDetector(
-                        onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));},
+                        onTap: () {
+                          //Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));
+                          Navigator.pushReplacementNamed(context, '/register', arguments: {
+                            'location': "brasil",
+                            'flag': "instance.flag",
+                            'time': "instance.time"
+                          });
+                          },
                         child: new Text(
                         "clique Aqui.",
                         style: new TextStyle(fontSize: 20.0, color: Colors.white,  fontWeight: FontWeight.bold),
                       ))
                     ],
                   ),
-                ))
+                )),
+
+
+
           ],
         ));
   }

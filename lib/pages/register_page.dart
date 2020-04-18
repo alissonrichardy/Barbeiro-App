@@ -8,8 +8,10 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         backgroundColor: Color(0XFF1E1E1E), //Color(0XFF1E1E1E),
         body: new ListView(
@@ -179,7 +181,13 @@ class _RegisterPageState extends State<RegisterPage> {
                             fontWeight: FontWeight.bold),
                       ),
                       GestureDetector(
-                        onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));},
+                        onTap: () {
+                          Navigator.pushReplacementNamed(context, '/login', arguments: {
+                          'location': "brasil",
+                          'flag': "instance.flag",
+                          'time': "instance.time"
+                        });}
+                        ,
                         child: new Text(
                         "clique Aqui.",
                         style: new TextStyle(
