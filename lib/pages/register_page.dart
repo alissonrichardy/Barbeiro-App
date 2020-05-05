@@ -8,10 +8,12 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final emailController = TextEditingController();
+  final nomeController = TextEditingController();
+  final senhaController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         backgroundColor: Color(0XFF1E1E1E), //Color(0XFF1E1E1E),
         body: new ListView(
@@ -43,6 +45,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: new TextFormField(
                         style: new TextStyle(color: Colors.white),
                         textAlign: TextAlign.center,
+                        controller: emailController,
                         decoration: new InputDecoration(
                           labelText: 'E-mail',
                           labelStyle: TextStyle(
@@ -76,6 +79,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: new TextFormField(
                         style: new TextStyle(color: Colors.white),
                         textAlign: TextAlign.center,
+                        controller: nomeController,
                         keyboardType: TextInputType.text,
                         decoration: new InputDecoration(
                           labelText: 'Nome',
@@ -111,6 +115,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         style: new TextStyle(color: Colors.white),
                         obscureText: true,
                         textAlign: TextAlign.center,
+                        controller: senhaController,
                         decoration: new InputDecoration(
                           labelText: 'Senha',
                           labelStyle: TextStyle(
@@ -142,7 +147,23 @@ class _RegisterPageState extends State<RegisterPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      if (emailController.text.isNotEmpty &&
+                          senhaController.text.isNotEmpty &&
+                          nomeController.text.isNotEmpty) {
+                        Navigator.pushReplacementNamed(context, '/loading',
+                            arguments: {
+                              'register': true,
+                              'email': emailController.text,
+                              'nome': nomeController.text,
+                              'senha': senhaController.text,
+                              'nextRota': "/login",
+                              'backRota': "/register"
+                            });
+                      } else {
+                        print("campo vazio");
+                      }
+                    },
                     child: new Container(
                       height: 50.0,
                       width: 150,
@@ -166,7 +187,6 @@ class _RegisterPageState extends State<RegisterPage> {
             new SizedBox(
               height: 30.0,
             ),
-
             new Padding(
                 padding: const EdgeInsets.only(top: 15),
                 child: Center(
@@ -181,20 +201,16 @@ class _RegisterPageState extends State<RegisterPage> {
                             fontWeight: FontWeight.bold),
                       ),
                       GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacementNamed(context, '/login', arguments: {
-                          'location': "brasil",
-                          'flag': "instance.flag",
-                          'time': "instance.time"
-                        });}
-                        ,
-                        child: new Text(
-                        "clique Aqui.",
-                        style: new TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ))
+                          onTap: () {
+                            Navigator.pushReplacementNamed(context, '/login');
+                          },
+                          child: new Text(
+                            "clique Aqui.",
+                            style: new TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ))
                     ],
                   ),
                 ))

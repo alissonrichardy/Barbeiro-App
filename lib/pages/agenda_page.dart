@@ -1,54 +1,56 @@
-import 'package:flutter/cupertino.dart';
+import 'package:barbeiroapp/service/agendamento.dart';
 import 'package:flutter/material.dart';
-import 'package:barbeiroapp/service/servico.dart' as service;
-import 'package:barbeiroapp/model/servico_model.dart' as ServicoModel;
-import 'package:barbeiroapp/userInfo.dart' as user;
+import 'package:barbeiroapp/model/agendamento_model.dart' as model;
+import 'package:date_format/date_format.dart';
 
-List<dynamic> listServico = [];
+DateTime data = new DateTime.now();
+List<model.Agendadamento> listaAgendamentos = [];
 
-class ServicosPage extends StatefulWidget {
-  @override
-  _ServicosPageState createState() => _ServicosPageState();
+
+DateTime convertDateFromString(String strDate){
+  DateTime todayDate = DateTime.parse(strDate);
+  //print(todayDate);
+  //print(formatDate(todayDate, [yyyy, '/', mm, '/', dd, ' ', hh, ':', nn, ':', ss, ' ', am]));
+  return todayDate;
 }
 
-class _ServicosPageState extends State<ServicosPage> {
 
-  Future<List<dynamic>> getServicos() async {
-    bool sucesso = false;
+class AgendaPage extends StatefulWidget {
+  @override
+  _AgendaPageState createState() => _AgendaPageState();
+}
+
+class _AgendaPageState extends State<AgendaPage> {
+  Future<List<dynamic>> getAgendamentosAll() async {}
+
+  Future<List<dynamic>> getAgendamentos() async {
+    listaAgendamentos = [];
+    List<dynamic> dados;
     try {
-      List<dynamic> lista = await service.carregarServicos();
-      listServico = [];
-      lista.forEach((ls) => {
-            listServico.add(new ServicoModel.Servico(
-                ls['id'], ls['nome'], ls['duracao'], ls['pontos'], ls['valor']))
-          });
-      sucesso = true;
-    } catch (e) {
-      print(e);
-    } finally {
-      if (!sucesso) {
-        print("nao teve sucesso ao buscar dados");
-      }
-    }
+      dados = await getAgendamentosByIdCliente();
+      dados.forEach((ls) => {
+        listaAgendamentos.add(new model.Agendadamento(ls["id"], convertDateFromString(ls["dataAgendamento"]), ls["nomeServico"], ls["nomeCliente"]))
+       ,
+      });
+    } catch (error) {} finally {}
   }
 
   @override
   void initState() {
     super.initState();
-   // print("informações usuarios: " + user.userInfo.toString());
 
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0XFF1E1E1E), //Color(0XFF1E1E1E),
-      appBar: new AppBar(
-        title: new Text("Serviços"),
+      appBar: AppBar(
+        title: Text("Agenda"),
         centerTitle: true,
       ),
+      backgroundColor: Color(0XFF1E1E1E),
       body: FutureBuilder(
-        future: getServicos(),
+        future: getAgendamentos(),
         builder: (context, snapshot){
           switch(snapshot.connectionState){
             case ConnectionState.waiting:
@@ -76,8 +78,8 @@ class _ServicosPageState extends State<ServicosPage> {
               );
               else return new ListView.builder(
                 padding: EdgeInsets.only(top: 10),
-                itemCount: listServico.length,
-                itemBuilder: CardServico,
+                itemCount: listaAgendamentos.length,
+                itemBuilder: CardAgenda,
               );
           }
 
@@ -87,29 +89,26 @@ class _ServicosPageState extends State<ServicosPage> {
   }
 }
 
-Widget CardServico(BuildContext context, int index) {
+Widget CardAgenda(BuildContext context, int index) {
   return Padding(
     padding: EdgeInsets.only(top: 2, bottom: 10),
     child: Dismissible(
       key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
       background: Container(
-        //color: Colors.green,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color:Color(0xFF3A3939)),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100), color: Color(0xFF3A3939)),
         child: Align(
           alignment: Alignment(0.9, 0.0),
           child: Text(
-            "Agendar",
-            style: TextStyle(color: Color(0xFFE2D9D9), fontWeight: FontWeight.bold, fontSize: 20),
+            "Cancelar",
+            style: TextStyle(
+                color: Colors.red, fontWeight: FontWeight.bold, fontSize: 20),
           ),
         ),
       ),
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
         // Navigator.push(context, MaterialPageRoute(builder: (context) => AgendamentoPage()));
-        Navigator.pushReplacementNamed(context, '/agendamento', arguments: {
-          'id': listServico[index].getId(),
-          'nome': listServico[index].getNome(),
-        });
       },
       child: new Container(
         height: 100.0,
@@ -127,8 +126,11 @@ Widget CardServico(BuildContext context, int index) {
             Container(
               width: 200.0,
               child: new Text(
-                listServico[index].getNome(),
-                style: new TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold, color: Color(0xFFD2D2D2)),
+                listaAgendamentos[index].nomeServico,
+                style: new TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFD2D2D2)),
               ),
             ),
             SizedBox(
@@ -147,15 +149,12 @@ Widget CardServico(BuildContext context, int index) {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     new Text(
-                      listServico[index].getTempo().toString() + " min",
-                      style: new TextStyle(
-                          color: Color(0xFFD2D2D2), fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    new Text(
-                      "R\$ " + listServico[index].getPreco().toString(),
+                      listaAgendamentos[index].dataAgendamento.day.toString() +
+                          "/" +
+                          listaAgendamentos[index]
+                              .dataAgendamento
+                              .month
+                              .toString(),
                       style: new TextStyle(
                           color: Color(0xFFE2D9D9),
                           fontWeight: FontWeight.bold,
@@ -165,9 +164,16 @@ Widget CardServico(BuildContext context, int index) {
                       height: 10.0,
                     ),
                     new Text(
-                      listServico[index].getPontos().toString() + " pts",
+                      listaAgendamentos[index].dataAgendamento.hour.toString() +
+                          ":" +
+                          listaAgendamentos[index]
+                              .dataAgendamento
+                              .minute
+                              .toString(),
                       style: new TextStyle(
-                          color: Color(0xFFD2D2D2), fontWeight: FontWeight.bold),
+                          color: Color(0xFFE2D9D9),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0),
                     ),
                   ],
                 ),

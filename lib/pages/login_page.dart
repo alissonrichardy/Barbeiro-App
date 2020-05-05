@@ -1,8 +1,4 @@
-import 'package:barbeiroapp/pages/register_page.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-//import 'package:barbeiroapp/service/agendamento.dart' as service;
 import 'package:barbeiroapp/service/login.dart' as service;
 
 
@@ -18,16 +14,6 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final senhaController = TextEditingController();
 
-  Future<bool> logar(String email, String senha) async{
-    bool resultado = await service.verificarLogin(email, senha);
-    if (resultado){
-      print("entrou");
-    }
-    else{
-      print("não entrou");
-    }
-    return resultado;
-  }
 
 
   @override
@@ -37,7 +23,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-
 
     return Scaffold(
         backgroundColor: Color(0XFF1E1E1E), //Color(0XFF1E1E1E),
@@ -136,10 +121,17 @@ class _LoginPageState extends State<LoginPage> {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
+                      if(emailController.text.isNotEmpty && senhaController.text.isNotEmpty){
                       Navigator.pushReplacementNamed(context, '/loading', arguments: {
+                        'register': false,
                         'email': emailController.text,
-                        'senha': senhaController.text
-                      });
+                        'senha': senhaController.text,
+                        'nextRota': "/home",
+                        'backRota': "/login"
+                      });}
+                      else{
+                        print("existe campo vazio");
+                      }
                     },
                     child: new Container(
                       height: 50.0,
@@ -186,11 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                       GestureDetector(
                         onTap: () {
                           //Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));
-                          Navigator.pushReplacementNamed(context, '/register', arguments: {
-                            'location': "brasil",
-                            'flag': "instance.flag",
-                            'time': "instance.time"
-                          });
+                          Navigator.pushReplacementNamed(context, '/register');
                           },
                         child: new Text(
                         "clique Aqui.",
