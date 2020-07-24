@@ -1,3 +1,5 @@
+import 'package:barbeiroapp/service/agendamento.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:barbeiroapp/model/servico_model.dart' as ServicoModel;
 
@@ -8,20 +10,26 @@ class AgendamentoPage extends StatefulWidget {
 
 class _AgendamentoPageState extends State<AgendamentoPage> {
   Map data;
-  Map servico= {};
+  Map servico = {};
 
-
+  DateTime dataMaxima = DateTime.now();
   DateTime dataAgendamento = DateTime.now();
+
+  int limitDiasAgendamento = 30;
 
   @override
   Widget build(BuildContext context) {
     data = ModalRoute.of(context).settings.arguments;
-    if(data != null) {
-       servico = {"id": data['id'], "nome": data['nome']};
+    if (data != null) {
+      servico = {"id": data['id'], "nome": data['nome']};
 
       return Scaffold(
         appBar: new AppBar(
-          title: Text("Agendar Serviço"),
+          title: Text("Agendar Serviço",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 40.0,
+                  fontWeight: FontWeight.bold)),
           centerTitle: true,
           backgroundColor: Colors.black,
         ),
@@ -29,6 +37,9 @@ class _AgendamentoPageState extends State<AgendamentoPage> {
         body: ListView(
           padding: EdgeInsets.only(top: 10.0),
           children: <Widget>[
+            SizedBox(
+              height: 10,
+            ),
             new Center(
               child: Text(
                 //"Corte + Barba",
@@ -40,19 +51,45 @@ class _AgendamentoPageState extends State<AgendamentoPage> {
               ),
             ),
             SizedBox(
-              height: 10.0,
+              height: 20.0,
             ),
 
             // Container
             new Center(
               child: new Container(
-                height: 365.0,
-                width: 320.0,
+                height: 400.0,
+                width: 400.0,
                 decoration: new BoxDecoration(
-                    color: Color(0xFF3A3939),
+                    color: Colors.white24, //Color(0xFF3A3939)
                     borderRadius: BorderRadius.circular(20.0)),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    SizedBox(
+                      height: 400,
+                      child: CupertinoDatePicker(
+                          minimumDate: dataMaxima,
+                          initialDateTime: dataAgendamento,
+                          use24hFormat: true,
+                          mode: CupertinoDatePickerMode.dateAndTime,
+                          maximumDate: new DateTime(
+                              dataMaxima.year,
+                              dataMaxima.month,
+                              dataMaxima.day + limitDiasAgendamento,
+                              dataMaxima.hour,
+                              dataMaxima.minute,
+                              dataMaxima.second,
+                              dataMaxima.millisecond,
+                              dataMaxima.microsecond),
+                          onDateTimeChanged: (dateTime) {
+                            print(dateTime);
+                            setState(() {
+                              dataAgendamento = dateTime;
+                            });
+                          }),
+                    ),
+
+                    /*
                     // title dia
                     new Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -66,6 +103,7 @@ class _AgendamentoPageState extends State<AgendamentoPage> {
                         )
                       ],
                     ),
+
                     //Dias
                     new Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -78,11 +116,9 @@ class _AgendamentoPageState extends State<AgendamentoPage> {
                               borderRadius: BorderRadius.circular(20.0)),
                           child: Column(
                             children: <Widget>[
-
                               SizedBox(
                                 height: 25,
                               ),
-
                               new Row(
                                 children: <Widget>[
                                   SizedBox(
@@ -96,41 +132,38 @@ class _AgendamentoPageState extends State<AgendamentoPage> {
                                             borderRadius: BorderRadius.only(
                                                 topLeft: Radius.circular(10),
                                                 topRight: Radius.circular(10),
-                                                bottomRight: Radius.circular(
-                                                    10),
-                                                bottomLeft: Radius.circular(
-                                                    10)),
+                                                bottomRight:
+                                                    Radius.circular(10),
+                                                bottomLeft:
+                                                    Radius.circular(10)),
                                             border: Border.fromBorderSide(
                                                 BorderSide(
                                                     color: Colors.white))),
                                         child: Center(
                                             child: FlatButton(
-                                              onPressed: () {
-                                                print("ok");
-                                              },
-                                              child: Text(
-                                                  dataAgendamento.day
-                                                      .toString() + "\\" +
-                                                      dataAgendamento.month
-                                                          .toString(),
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20.0,
-                                                      fontWeight: FontWeight
-                                                          .bold)),
-                                            ))),
+                                          onPressed: () {
+                                            print("ok");
+                                          },
+                                          child: Text(
+                                              dataAgendamento.day.toString() +
+                                                  "\\" +
+                                                  dataAgendamento.month
+                                                      .toString(),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20.0,
+                                                  fontWeight: FontWeight.bold)),
+                                        ))),
                                   ),
                                   SizedBox(
                                     width: 20,
                                   ),
                                 ],
                               ),
-
                               SizedBox(
                                 height: 10.0,
                               ),
-
                               new Center(
                                 child: RaisedButton(
                                   onPressed: () {
@@ -145,27 +178,17 @@ class _AgendamentoPageState extends State<AgendamentoPage> {
                                               setState(() {
                                                 // dayPicker = time;
                                                 dataAgendamento = time;
-                                                print(time.day);
+                                                print(time);
                                               });
                                             },
                                             firstDate: DateTime.utc(
-                                              DateTime
-                                                  .now()
-                                                  .year,
-                                              DateTime
-                                                  .now()
-                                                  .month,
-                                              DateTime
-                                                  .now()
-                                                  .day,
+                                              DateTime.now().year,
+                                              DateTime.now().month,
+                                              DateTime.now().day,
                                             ),
                                             lastDate: DateTime.utc(
-                                              DateTime
-                                                  .now()
-                                                  .year,
-                                              DateTime
-                                                  .now()
-                                                  .month,
+                                              DateTime.now().year,
+                                              DateTime.now().month,
                                               31,
                                             ),
                                             selectableDayPredicate: (time) {
@@ -187,7 +210,6 @@ class _AgendamentoPageState extends State<AgendamentoPage> {
                                   ),
                                 ),
                               )
-
                             ],
                           ),
                         )
@@ -198,6 +220,7 @@ class _AgendamentoPageState extends State<AgendamentoPage> {
                     SizedBox(
                       height: 10.0,
                     ),
+
                     new Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -221,7 +244,6 @@ class _AgendamentoPageState extends State<AgendamentoPage> {
                               borderRadius: BorderRadius.circular(20.0)),
                           child: Column(
                             children: <Widget>[
-
                               new Row(
                                 children: <Widget>[
                                   Expanded(
@@ -311,7 +333,7 @@ class _AgendamentoPageState extends State<AgendamentoPage> {
                                             color: Color(0xFF1E1E1E),
                                             borderRadius: BorderRadius.only(
                                                 bottomLeft:
-                                                Radius.circular(10.0)),
+                                                    Radius.circular(10.0)),
                                             border: Border.fromBorderSide(
                                                 BorderSide(
                                                     color: Colors.white))),
@@ -331,7 +353,7 @@ class _AgendamentoPageState extends State<AgendamentoPage> {
                                             color: Color(0xFF1E1E1E),
                                             borderRadius: BorderRadius.only(
                                                 bottomRight:
-                                                Radius.circular(10.0)),
+                                                    Radius.circular(10.0)),
                                             border: Border.fromBorderSide(
                                                 BorderSide(
                                                     color: Colors.white))),
@@ -351,6 +373,8 @@ class _AgendamentoPageState extends State<AgendamentoPage> {
                         )
                       ],
                     ),
+
+                     */
                   ],
                 ),
               ),
@@ -360,11 +384,17 @@ class _AgendamentoPageState extends State<AgendamentoPage> {
               height: 20,
             ),
 
-            // Ação
+            // Ação,
             new Center(
               child: RaisedButton(
-                onPressed: () {},
-                color: Colors.green,
+                onPressed: () async {
+                  print("relizando agendamento");
+
+                  await agendarServico(servico["id"], dataAgendamento);
+                  print(servico["id"]);
+                  Navigator.pushReplacementNamed(context, '/agenda');
+                },
+                color: Colors.white24,
                 child: Text(
                   "Realizar Agendamento",
                   textAlign: TextAlign.center,
@@ -378,16 +408,8 @@ class _AgendamentoPageState extends State<AgendamentoPage> {
           ],
         ),
       );
-    }
-    else{
-      return new Container(
-
-      );
+    } else {
+      return new Container();
     }
   }
 }
-/*
-      servico = new ServicoModel.Servico(
-          data['id'], data['nome'], data['duracao'], data['pontos'],
-          data['valor']);
- */

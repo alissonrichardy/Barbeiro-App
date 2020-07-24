@@ -12,7 +12,6 @@ class ServicosPage extends StatefulWidget {
 }
 
 class _ServicosPageState extends State<ServicosPage> {
-
   Future<List<dynamic>> getServicos() async {
     bool sucesso = false;
     try {
@@ -35,8 +34,7 @@ class _ServicosPageState extends State<ServicosPage> {
   @override
   void initState() {
     super.initState();
-   // print("informações usuarios: " + user.userInfo.toString());
-
+    // print("informações usuarios: " + user.userInfo.toString());
   }
 
   @override
@@ -44,13 +42,19 @@ class _ServicosPageState extends State<ServicosPage> {
     return Scaffold(
       backgroundColor: Color(0XFF1E1E1E), //Color(0XFF1E1E1E),
       appBar: new AppBar(
-        title: new Text("Serviços"),
+        title: new Text("Serviços",
+            style: TextStyle(
+              fontFamily: 'editundo',
+              color: Colors.white,
+              fontSize: 35.0,
+              // fontWeight: FontWeight.bold
+            )),
         centerTitle: true,
       ),
       body: FutureBuilder(
         future: getServicos(),
-        builder: (context, snapshot){
-          switch(snapshot.connectionState){
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
             case ConnectionState.waiting:
             case ConnectionState.none:
               return Center(
@@ -65,41 +69,48 @@ class _ServicosPageState extends State<ServicosPage> {
                 ),
               );
             default:
-              if(snapshot.hasError) return Container(
-                width: 200.0,
-                height: 200.0,
-                alignment: Alignment.center,
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-                  strokeWidth: 5.0,
-                ),
-              );
-              else return new ListView.builder(
-                padding: EdgeInsets.only(top: 10),
-                itemCount: listServico.length,
-                itemBuilder: CardServico,
-              );
+              if (snapshot.hasError)
+                return Container(
+                  width: 200.0,
+                  height: 200.0,
+                  alignment: Alignment.center,
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                    strokeWidth: 5.0,
+                  ),
+                );
+              else
+                return new ListView.builder(
+                  padding: EdgeInsets.only(top: 10),
+                  itemCount: listServico.length,
+                  itemBuilder: cardServico,
+                );
           }
-
         },
       ),
     );
   }
 }
 
-Widget CardServico(BuildContext context, int index) {
+Widget cardServico(BuildContext context, int index) {
+  var _size = MediaQuery.of(context).size;
   return Padding(
-    padding: EdgeInsets.only(top: 2, bottom: 10),
+    padding: EdgeInsets.only(
+        top: _size.height * .01, bottom: _size.height * .01, left: 5, right: 5),
     child: Dismissible(
       key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
       background: Container(
         //color: Colors.green,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color:Color(0xFF3A3939)),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100), color: Color(0xFF3A3939)),
         child: Align(
           alignment: Alignment(0.9, 0.0),
           child: Text(
             "Agendar",
-            style: TextStyle(color: Color(0xFFE2D9D9), fontWeight: FontWeight.bold, fontSize: 20),
+            style: TextStyle(
+                color: Color(0xFFE2D9D9),
+                fontWeight: FontWeight.bold,
+                fontSize: 20),
           ),
         ),
       ),
@@ -128,7 +139,10 @@ Widget CardServico(BuildContext context, int index) {
               width: 200.0,
               child: new Text(
                 listServico[index].getNome(),
-                style: new TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold, color: Color(0xFFD2D2D2)),
+                style: new TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFD2D2D2)),
               ),
             ),
             SizedBox(
@@ -149,7 +163,8 @@ Widget CardServico(BuildContext context, int index) {
                     new Text(
                       listServico[index].getTempo().toString() + " min",
                       style: new TextStyle(
-                          color: Color(0xFFD2D2D2), fontWeight: FontWeight.bold),
+                          color: Color(0xFFD2D2D2),
+                          fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
                       height: 10.0,
@@ -167,7 +182,8 @@ Widget CardServico(BuildContext context, int index) {
                     new Text(
                       listServico[index].getPontos().toString() + " pts",
                       style: new TextStyle(
-                          color: Color(0xFFD2D2D2), fontWeight: FontWeight.bold),
+                          color: Color(0xFFD2D2D2),
+                          fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),

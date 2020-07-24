@@ -17,6 +17,7 @@ dependencies:
   flutter_spinkit: ^4.1.2+1
   carousel_slider: ^2.0.0
   date_format: ^1.0.8
+  flutter_svg: ^0.17.0
 
 
 dev_dependencies:
@@ -41,6 +42,9 @@ flutter:
   - images/icons/
   - images/barbeiros/
   - images/galeria/
+  - images/outras/
+  - images/icons-padrao/
+
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -54,12 +58,18 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: Editundo
+      fonts:
+        - asset: fonts/editundo.ttf
+        - asset: fonts/editundo.ttf
+          style: italic
+
+    - family: Segoe-ui
+      fonts:
+        - asset: fonts/segoe-mt.ttf
+        - asset: fonts/segoe-mt-bold.ttf
+          style: italic
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

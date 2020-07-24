@@ -1,19 +1,16 @@
 import 'package:barbeiroapp/service/agendamento.dart';
 import 'package:flutter/material.dart';
 import 'package:barbeiroapp/model/agendamento_model.dart' as model;
-import 'package:date_format/date_format.dart';
 
 DateTime data = new DateTime.now();
 List<model.Agendadamento> listaAgendamentos = [];
 
-
-DateTime convertDateFromString(String strDate){
+DateTime convertDateFromString(String strDate) {
   DateTime todayDate = DateTime.parse(strDate);
   //print(todayDate);
   //print(formatDate(todayDate, [yyyy, '/', mm, '/', dd, ' ', hh, ':', nn, ':', ss, ' ', am]));
   return todayDate;
 }
-
 
 class AgendaPage extends StatefulWidget {
   @override
@@ -21,38 +18,45 @@ class AgendaPage extends StatefulWidget {
 }
 
 class _AgendaPageState extends State<AgendaPage> {
-  Future<List<dynamic>> getAgendamentosAll() async {}
-
   Future<List<dynamic>> getAgendamentos() async {
     listaAgendamentos = [];
     List<dynamic> dados;
     try {
       dados = await getAgendamentosByIdCliente();
       dados.forEach((ls) => {
-        listaAgendamentos.add(new model.Agendadamento(ls["id"], convertDateFromString(ls["dataAgendamento"]), ls["nomeServico"], ls["nomeCliente"]))
-       ,
-      });
+            listaAgendamentos.add(new model.Agendadamento(
+                ls["id"],
+                convertDateFromString(ls["dataAgendamento"]),
+                ls["nomeServico"],
+                ls["nomeCliente"])),
+          });
     } catch (error) {} finally {}
+    return null;
   }
 
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Agenda"),
+        title: Text("Agenda",
+            style: TextStyle(
+              fontFamily: 'editundo',
+              color: Colors.white,
+              fontSize: 35.0,
+              // fontWeight: FontWeight.bold
+            )),
         centerTitle: true,
       ),
       backgroundColor: Color(0XFF1E1E1E),
       body: FutureBuilder(
         future: getAgendamentos(),
-        builder: (context, snapshot){
-          switch(snapshot.connectionState){
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
             case ConnectionState.waiting:
             case ConnectionState.none:
               return Center(
@@ -67,31 +71,34 @@ class _AgendaPageState extends State<AgendaPage> {
                 ),
               );
             default:
-              if(snapshot.hasError) return Container(
-                width: 200.0,
-                height: 200.0,
-                alignment: Alignment.center,
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-                  strokeWidth: 5.0,
-                ),
-              );
-              else return new ListView.builder(
-                padding: EdgeInsets.only(top: 10),
-                itemCount: listaAgendamentos.length,
-                itemBuilder: CardAgenda,
-              );
+              if (snapshot.hasError)
+                return Container(
+                  width: 200.0,
+                  height: 200.0,
+                  alignment: Alignment.center,
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                    strokeWidth: 5.0,
+                  ),
+                );
+              else
+                return new ListView.builder(
+                  padding: EdgeInsets.only(top: 10),
+                  itemCount: listaAgendamentos.length,
+                  itemBuilder: cardAgenda,
+                );
           }
-
         },
       ),
     );
   }
 }
 
-Widget CardAgenda(BuildContext context, int index) {
+Widget cardAgenda(BuildContext context, int index) {
+  var _size = MediaQuery.of(context).size;
   return Padding(
-    padding: EdgeInsets.only(top: 2, bottom: 10),
+    padding: EdgeInsets.only(
+        top: _size.height * .01, bottom: _size.height * .01, left: 5, right: 5),
     child: Dismissible(
       key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
       background: Container(
@@ -109,6 +116,7 @@ Widget CardAgenda(BuildContext context, int index) {
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
         // Navigator.push(context, MaterialPageRoute(builder: (context) => AgendamentoPage()));
+        deleteAgendamento(listaAgendamentos[index].id);
       },
       child: new Container(
         height: 100.0,

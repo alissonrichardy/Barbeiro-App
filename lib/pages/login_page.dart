@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:barbeiroapp/service/login.dart' as service;
 
-
-
 class LoginPage extends StatefulWidget {
-
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   final emailController = TextEditingController();
   final senhaController = TextEditingController();
-
-
 
   @override
   void initState() {
@@ -23,7 +17,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         backgroundColor: Color(0XFF1E1E1E), //Color(0XFF1E1E1E),
         body: new ListView(
@@ -56,10 +49,11 @@ class _LoginPageState extends State<LoginPage> {
                         style: new TextStyle(color: Colors.white),
                         textAlign: TextAlign.center,
                         controller: emailController,
-
                         decoration: new InputDecoration(
                           labelText: 'E-mail',
-                          labelStyle: TextStyle(color: Color(0xFF707070), fontWeight: FontWeight.bold),
+                          labelStyle: TextStyle(
+                              color: Color(0xFF707070),
+                              fontWeight: FontWeight.bold),
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.white)),
                           disabledBorder: OutlineInputBorder(
@@ -90,10 +84,11 @@ class _LoginPageState extends State<LoginPage> {
                         obscureText: true,
                         textAlign: TextAlign.center,
                         controller: senhaController,
-
                         decoration: new InputDecoration(
                           labelText: 'Senha',
-                          labelStyle: TextStyle(color: Color(0xFF707070),  fontWeight: FontWeight.bold),
+                          labelStyle: TextStyle(
+                              color: Color(0xFF707070),
+                              fontWeight: FontWeight.bold),
                           focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.white)),
                           disabledBorder: OutlineInputBorder(
@@ -121,15 +116,18 @@ class _LoginPageState extends State<LoginPage> {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                      if(emailController.text.isNotEmpty && senhaController.text.isNotEmpty){
-                      Navigator.pushReplacementNamed(context, '/loading', arguments: {
-                        'register': false,
-                        'email': emailController.text,
-                        'senha': senhaController.text,
-                        'nextRota': "/home",
-                        'backRota': "/login"
-                      });}
-                      else{
+                      //emailController.text.isNotEmpty && senhaController.text.isNotEmpty
+
+                      if (true) {
+                        Navigator.pushReplacementNamed(context, '/loading',
+                            arguments: {
+                              'register': false,
+                              'email': "adm@gmail.com", //emailController.text,
+                              'senha': "123456", //senhaController.text,
+                              'nextRota': "/home",
+                              'backRota': "/login"
+                            });
+                      } else {
                         print("existe campo vazio");
                       }
                     },
@@ -143,8 +141,10 @@ class _LoginPageState extends State<LoginPage> {
                       alignment: Alignment.center,
                       child: new Text(
                         "Entrar",
-                        style:
-                            new TextStyle(fontSize: 20.0, color: Color(0XFF707070), fontWeight: FontWeight.bold),
+                        style: new TextStyle(
+                            fontSize: 20.0,
+                            color: Color(0XFF707070),
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -160,7 +160,10 @@ class _LoginPageState extends State<LoginPage> {
                 children: <Widget>[
                   new Text(
                     "Esqueci a senha...",
-                    style: new TextStyle(fontSize: 20.0, color: Color(0XFF707070),  fontWeight: FontWeight.bold),
+                    style: new TextStyle(
+                        fontSize: 20.0,
+                        color: Color(0XFF707070),
+                        fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -173,23 +176,27 @@ class _LoginPageState extends State<LoginPage> {
                     children: <Widget>[
                       new Text(
                         "Não tem registro? ",
-                        style: new TextStyle(fontSize: 20.0, color: Color(0XFF707070), fontWeight: FontWeight.bold),
+                        style: new TextStyle(
+                            fontSize: 20.0,
+                            color: Color(0XFF707070),
+                            fontWeight: FontWeight.bold),
                       ),
                       GestureDetector(
-                        onTap: () {
-                          //Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));
-                          Navigator.pushReplacementNamed(context, '/register');
+                          onTap: () {
+                            //Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));
+                            Navigator.pushReplacementNamed(
+                                context, '/register');
                           },
-                        child: new Text(
-                        "clique Aqui.",
-                        style: new TextStyle(fontSize: 20.0, color: Colors.white,  fontWeight: FontWeight.bold),
-                      ))
+                          child: new Text(
+                            "clique Aqui.",
+                            style: new TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ))
                     ],
                   ),
                 )),
-
-
-
           ],
         ));
   }

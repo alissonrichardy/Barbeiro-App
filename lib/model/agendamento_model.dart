@@ -1,11 +1,8 @@
-
 class Agendadamento {
   int _id;
   DateTime _dataAgendamento;
   String _nomeServico;
   String _nomeCliente;
-
-
 
   Agendadamento(int id, DateTime data, String servico, String cliente) {
     _id = id;
@@ -37,5 +34,4 @@ class Agendadamento {
   set id(int value) {
     _id = value;
   }
-
 }

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'ipservidor.dart';
 
 
 Future<Map<String, dynamic>> verificarLogin(String email, String senha) async {
@@ -10,7 +10,7 @@ Future<Map<String, dynamic>> verificarLogin(String email, String senha) async {
 
   Map login = {"email": email, "senha": senha};
   http.Response response;
-  response = await http.put(_url,
+  response = await http.put(urlServidor + "login",
       headers: {HttpHeaders.contentTypeHeader: "application/json"},
       body: json.encode(login));
   return json.decode(response.body);
@@ -22,7 +22,7 @@ Future<bool> registerUser(String email, String senha, String nome) async {
 
   Map resgister = {"email": email, "senha": senha, "nome": nome};
   http.Response response;
-  response = await http.post(_url,
+  response = await http.post(urlServidor + "cliente",
       headers: {HttpHeaders.contentTypeHeader: "application/json"},
       body: json.encode(resgister));
   return json.decode(response.body);
